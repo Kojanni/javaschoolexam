@@ -1,5 +1,7 @@
 package com.tsystems.javaschool.tasks.pyramid;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PyramidBuilder {
@@ -14,7 +16,58 @@ public class PyramidBuilder {
      */
     public int[][] buildPyramid(List<Integer> inputNumbers) {
         // TODO : Implement your solution here
-        return new int[0][0];
+        inputNumbers.forEach(n -> {
+            if (n == null) {
+                throw new CannotBuildPyramidException();
+            }
+        });
+            Collections.sort(inputNumbers);
+            int amountNumbers = inputNumbers.size();
+            int amountLines = 0;
+            do {
+                amountLines++;
+                amountNumbers -= amountLines;
+            } while (amountNumbers > 0);
+            if (amountNumbers < 0) {
+                throw new CannotBuildPyramidException();
+            } else {
+                int elementInLine = inputNumbers.size();
+                for (int e = amountLines - 1; e >= 0; e--) {
+                    elementInLine += (e * 2 + (amountLines - e - 1));
+                }
+                elementInLine = elementInLine / amountLines;
+                int[][] pyramid = new int[amountLines][elementInLine];
+                int amountZero = 0;
+                amountNumbers = inputNumbers.size();
+                while (amountLines > 0) {
+                    int withoutZero = amountLines;
+                    int column = elementInLine - 1;
+                    boolean putZero = false;
+                    for (int z = 0; z < amountZero; z++) {
+                        pyramid[amountLines - 1][column] = 0;
+                        column--;
+                    }
+                    while (withoutZero != 0) {
+                        if (putZero) {
+                            pyramid[amountLines - 1][column] = 0;
+                            putZero = false;
+                            column--;
+                        }
+                        pyramid[amountLines - 1][column] = inputNumbers.get(amountNumbers - 1);
+                        putZero = true;
+                        withoutZero--;
+                        amountNumbers--;
+                        column--;
+                    }
+                    for (int z = 0; z < amountZero; z++) {
+                        pyramid[amountLines - 1][column] = 0;
+                        column--;
+                    }
+                    amountZero++;
+                    amountLines--;
+                }
+                return pyramid;
+            }
     }
 
 
