@@ -17,7 +17,7 @@ public class Subsequence {
         // TODO: Implement the logic here
         boolean possible = false;
         if (x == null || y == null) {
-            return false;
+            throw new IllegalArgumentException();
         } else {
                 int xElements = 0;
                 int j = 0;
